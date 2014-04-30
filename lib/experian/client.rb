@@ -6,9 +6,11 @@ module Experian
       validate_response(response)
 
     rescue Excon::Errors::SocketError => e
-      raise Experian::ClientError, "Could not connect to Experian: #{e.message}"
+      message = "Could not connect to Experian: #{e.message}"
+      log_error message
+      raise Experian::ClientError, message
     rescue Experian::Error => e
-      Experian.logger.debug "Experian Error Detected, Raw response: #{response.inspect}" if Experian.logger
+      log_error "Experian Error Detected, Raw response: #{response.inspect}"
       raise e
     end
 
@@ -25,7 +27,7 @@ module Experian
         raise Experian::ArgumentError, "Input parameter is missing or invalid"
       when 403
         # Transaction was authenticated but not authorized.
-        # The user ID may not have access to Precise ID XML Gateway product or it may be locked due to too 
+        # The user ID may not have access to Precise ID XML Gateway product or it may be locked due to too
         # many password violations.
         raise Experian::Forbidden, "Access forbidden, please contact experian"
       when 400..499
@@ -34,7 +36,7 @@ module Experian
         raise Experian::ServerError, "Response Code: #{response.status}"
       else
         if !!(response.headers["Location"] =~ /sso_logon/)
-          raise Experian::Forbidden, "Invalid Experian login credentials" 
+          raise Experian::Forbidden, "Invalid Experian login credentials"
         else
           response
         end
@@ -56,6 +58,10 @@ module Experian
 
     def request_uri
       Experian.net_connect_uri
+    end
+
+    def log_error(message)
+      Experian.logger.debug message if Experian.logger
     end
 
   end

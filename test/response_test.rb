@@ -4,6 +4,7 @@ describe Experian::Response do
 
   before do
     @response = Experian::Response.new(fixture("connect_check", "response.xml"))
+    @logger = Experian.logger = stub(error: nil)
   end
 
   it "should raise a ClientError if response contains invalid xml" do

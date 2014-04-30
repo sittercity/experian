@@ -54,6 +54,7 @@ module Experian
         if root
           parse_element(root)
         else
+          Experian.logger.error "Invalid Response\n#{@xml}" if Experian.logger
           raise Experian::ClientError, "Invalid xml response from Experian"
         end
       end
