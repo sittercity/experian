@@ -22,10 +22,11 @@ module Experian
 
       def submit_request(request)
         @logger.info "HERE IN EXPERIAN"
-        @logger.info "REQUEST: #{request}"
-        @logger.info "Raw response super: #{super}"
+        @logger.info "REQUEST: #{request.inspect}"
+        @logger.info "Raw response super: #{super.inspect}"
         raw_response = super
-        @logger.info "EXPERIAN GEM - raw response: #{raw_response}"
+        @logger.info "EXPERIAN GEM - raw response: #{raw_response.inspect}"
+        @logger.info "EXPERIAN GEM - raw response body: #{raw_response.body.inspect}"
         response = Response.new(raw_response.body)
         @logger.info "Experian Response: #{response.xml}"
         check_response(response,raw_response)
