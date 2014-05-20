@@ -2,6 +2,10 @@ module Experian
   module PreciseId
     class Client < Experian::Client
 
+      def initialize(logger)
+        @logger = logger
+      end
+
       def check_id(options = {})
         submit_request(PrimaryRequest.new(options))
       end
@@ -19,6 +23,7 @@ module Experian
       def submit_request(request)
         raw_response = super
         response = Response.new(raw_response.body)
+        @logger.info response.xml
         check_response(response,raw_response)
         [request,response]
       end
