@@ -21,6 +21,8 @@ module Experian
       private
 
       def submit_request(request)
+        @logger.info "HERE IN EXPERIAN"
+        @logger.info "REQUEST: #{request}"
         raw_response = super
         response = Response.new(raw_response.body)
         @logger.info "Experian Response: #{response.xml}"
