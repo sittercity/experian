@@ -28,6 +28,7 @@ module Experian
             xml.tag!('Surname', @options[:last_name])
             xml.tag!('First', @options[:first_name])
           end
+          xml.tag!('SSN', @options[:ssn]) if @options[:ssn]
           add_current_address(xml)
           add_phone_numebr(xml)
           xml.tag!('DOB', @options[:dob]) if @options[:dob]

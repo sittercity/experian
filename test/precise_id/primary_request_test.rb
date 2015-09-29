@@ -21,6 +21,11 @@ describe Experian::PreciseId::PrimaryRequest do
     assert_includes request.xml, "<DOB>1231990</DOB>"
   end
 
+  it "includes ssn if it's included" do
+    request = Experian::PreciseId::PrimaryRequest.new(params.merge({ :ssn => "999112233" }))
+    assert_includes request.xml, "<SSN>999112233</SSN>"
+  end
+
   it "includes phone number if it is provided" do
     request = Experian::PreciseId::PrimaryRequest.new(params.merge({ :phone => "12345" }))
     assert_match %r{<Phone>\s*<Number>12345</Number>\s*</Phone>}, request.xml
